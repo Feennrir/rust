@@ -95,3 +95,6 @@ fn main() {
     println!("Fin du programme");
 }
 ```
+
+**NOTE :** Qu'est ce qu'un `mut` ?
+Le mot-clé `mut` en Rust indique qu'une variable est mutable, c'est-à-dire qu'elle peut être modifiée après sa déclaration.
