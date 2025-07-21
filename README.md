@@ -98,3 +98,80 @@ fn main() {
 
 **NOTE :** Qu'est ce qu'un `mut` ?
 Le mot-clé `mut` en Rust indique qu'une variable est mutable, c'est-à-dire qu'elle peut être modifiée après sa déclaration.
+
+
+### Loops
+Rust propose plusieurs types de boucles, notamment `loop`, `while` et `for`.
+Voici un exemple de boucle `loop` :
+```rust
+fn main() {
+    let mut compteur = 0;
+    loop {
+        compteur += 1;
+        if compteur == 5 {
+            break; // Sort de la boucle
+        }
+        println!("Compteur : {}", compteur);
+    }
+}
+```
+
+### Les structures
+Les structures (`struct`) permettent de créer des types de données personnalisés. Voici un exemple :
+```rust
+struct Point {
+    x: f64,
+    y: f64,
+}
+impl Point {
+    fn new(x: f64, y: f64) -> Point {
+        Point { x, y }
+    }
+
+    fn distance(&self, other: &Point) -> f64 {
+        ((self.x - other.x).powi(2) + (self.y - other.y).powi(2)).sqrt()
+    }
+}
+fn main() {
+    let p1 = Point::new(0.0, 0.0);
+    let p2 = Point::new(3.0, 4.0);
+    println!("La distance entre p1 et p2 est : {}", p1.distance(&p2));
+}
+```
+
+### Fonctions associées
+Les fonctions associées sont des fonctions définies dans une structure qui peuvent être appelées sans instance de la structure. Elles sont souvent utilisées pour créer des constructeurs. Voici un exemple :
+```rust
+struct Circle {
+    radius: f64,
+}
+impl Circle {
+    fn new(radius: f64) -> Circle {
+        Circle { radius }
+    }
+    fn area(&self) -> f64 {     
+        std::f64::consts::PI * self.radius.powi(2)
+    }
+}
+```
+
+```rust
+struct Compteur {
+    valeur: i32,
+}
+impl Compteur {
+    fn new() -> Compteur {
+        Compteur { valeur: 0 }
+    }
+    fn incrementer(&mut self) { // &mut self : prend une référence mutable à self, ce qui permet de modifier l'instance de la structure
+        self.valeur += 1;
+    }
+    fn afficher(&self) {
+        println!("Valeur actuelle : {}", self.valeur);
+    }
+}
+```
+
+- `&self` : représente une référence à l'instance actuelle de la structure, permettant d'accéder à ses données sans la posséder. Lecture uniquement.
+- `&mut self` : représente une référence mutable à l'instance actuelle, permettant de modifier ses données. Écriture autorisée.
+- `self` : prend la possession de l'instance, ce qui signifie que l'instance n'est plus accessible après l'appel de la méthode. Utilisé pour consommer l'instance.
