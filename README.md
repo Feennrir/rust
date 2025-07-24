@@ -216,3 +216,115 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 ```
+
+### Projet : Gestionnaire de Fichiers
+
+
+#### Structure du projet
+Le gestionnaire de fichiers utilise une structure `FileManager` qui encapsule les opérations sur les fichiers :
+
+```rust
+struct FileManager {
+    current_directory: String,
+}
+
+impl FileManager {
+    fn new() -> Self {
+        FileManager {
+            current_directory: String::from("./"),
+        }
+    }
+}
+```
+
+#### Fonctionnalités implémentées
+
+**1. Lecture de fichiers**
+```rust
+fn read_file(&self, filename: &str) -> Result<String, io::Error> {
+    let path = format!("{}{}", self.current_directory, filename);
+    fs::read_to_string(path)
+}
+```
+- Utilise `fs::read_to_string()` pour lire le contenu complet d'un fichier
+- Retourne un `Result<String, io::Error>` pour gérer les erreurs
+
+**2. Écriture de fichiers**
+```rust
+fn write_file(&self, filename: &str, content: &str) -> Result<(), io::Error> {
+    let path = format!("{}{}", self.current_directory, filename);
+    fs::write(path, content)
+}
+```
+- Utilise `fs::write()` pour créer ou écraser un fichier
+- Retourne `Result<(), io::Error>` pour indiquer le succès ou l'échec
+
+**3. Modification de fichiers**
+```rust
+fn modify_file(&self, filename: &str, new_content: &str) -> Result<(), io::Error> {
+    let path = format!("{}{}", self.current_directory, filename);
+    let mut existing_content = match fs::read_to_string(&path) {
+        Ok(content) => content,
+        Err(_) => String::new(),
+    };
+    existing_content.push_str("\n");
+    existing_content.push_str(new_content);
+    fs::write(path, existing_content)
+}
+```
+- Lit d'abord le contenu existant avec gestion d'erreur via `match`
+- Ajoute le nouveau contenu à la fin du fichier existant
+
+**4. Suppression de fichiers**
+```rust
+fn delete_file(&self, filename: &str) -> Result<(), io::Error> {
+    let path = format!("{}{}", self.current_directory, filename);
+    fs::remove_file(path)
+}
+```
+
+**5. Listage des fichiers**
+```rust
+fn list_files(&self) -> Result<Vec<String>, io::Error> {
+    let mut files = Vec::new();
+    for entry in fs::read_dir(&self.current_directory)? {
+        let entry = entry?;
+        if entry.file_type()?.is_file() {
+            if let Some(filename) = entry.file_name().to_str() {
+                files.push(filename.to_string());
+            }
+        }
+    }
+    Ok(files)
+}
+```
+- Utilise `fs::read_dir()` pour parcourir le répertoire
+- Filtre uniquement les fichiers (pas les dossiers)
+- Utilise l'opérateur `?` pour la propagation d'erreurs
+
+#### Gestion des entrées utilisateur
+```rust
+fn get_user_input(prompt: &str) -> String {
+    print!("{}", prompt);
+    io::stdout().flush().unwrap(); // Force l'affichage immédiat
+    
+    let mut input = String::new();
+    while input.trim().is_empty() {
+        input.clear();
+        io::stdin().read_line(&mut input).expect("Erreur de lecture");
+    }
+    input.trim().to_string()
+}
+```
+- Fonction utilitaire pour lire l'entrée utilisateur
+- Utilise `io::stdout().flush()` pour forcer l'affichage du prompt
+- Boucle jusqu'à obtenir une entrée non vide
+
+#### Concepts Rust illustrés
+- **Structures et implémentations** : Organisation du code avec `struct` et `impl`
+- **Gestion d'erreurs** : Utilisation de `Result<T, E>` et de l'opérateur `?`
+- **Pattern matching** : Utilisation de `match` pour gérer les cas
+- **Ownership et borrowing** : Utilisation de références (`&self`, `&str`)
+- **Collections** : Manipulation de `Vec<String>` et `String`
+- **Modules externes** : Utilisation de `chrono` pour les dates
+- **I/O et gestion de fichiers** : Opérations sur le système de fichiers
