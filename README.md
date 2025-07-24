@@ -328,3 +328,95 @@ fn get_user_input(prompt: &str) -> String {
 - **Collections** : Manipulation de `Vec<String>` et `String`
 - **Modules externes** : Utilisation de `chrono` pour les dates
 - **I/O et gestion de fichiers** : Opérations sur le système de fichiers
+
+## Projet : Serveur de journalisation asynchrone
+
+### Objectif
+L'objectif de ce projet est d'implémenter un serveur de journalisation asynchrone capable de :
+- Écouter sur un port TCP.
+- Recevoir des messages texte de plusieurs clients simultanément.
+- Enregistrer ces messages dans un fichier de log avec un horodatage.
+
+### Structure du projet
+Le projet est organisé comme suit :
+```
+journalisation_server/
+|---src/
+   |__main.rs       # Serveur de journalisation
+   |__client.rs     # Clients pour tester le serveur
+|--logs/
+   |__server.log    # Fichier généré automatiquement pour stocker les logs
+|--Cargo.toml       # Dépendances et configuration du projet
+```
+
+### Fonctionnement du serveur (`main.rs`)
+1. **Démarrage du serveur** :
+   - Le serveur écoute sur `127.0.0.1:10000` grâce à `TcpListener`.
+   - Un fichier de log (`logs/server.log`) est créé automatiquement si nécessaire.
+
+2. **Gestion des connexions** :
+   - Chaque connexion client est gérée dans une tâche asynchrone indépendante grâce à `tokio::spawn`.
+   - Les messages reçus des clients sont envoyés via un canal (`mpsc::channel`) pour être écrits dans le fichier de log.
+
+3. **Écriture des logs** :
+   - Les messages sont horodatés avec `chrono::Utc` et enregistrés dans le fichier `server.log` au format suivant :
+     ```
+     [2025-07-24T14:20:00Z] Client A: log de A1
+     ```
+
+4. **Gestion des tâches** :
+   - Les tâches asynchrones sont stockées dans un vecteur et peuvent être attendues simultanément avec `tokio::join!`.
+
+### Fonctionnement des clients (`client.rs`)
+1. **Connexion au serveur** :
+   - Les clients se connectent au serveur via `TcpStream`.
+
+2. **Envoi des messages** :
+   - Chaque client envoie une série de messages texte au serveur avec un délai simulé entre chaque message (`tokio::time::sleep`).
+
+3. **Exemple de sortie dans le fichier `server.log`** :
+   ```
+   [2025-07-24T14:20:00Z] Client A: log de A1
+   [2025-07-24T14:20:01Z] Client B: log de B1
+   [2025-07-24T14:20:01Z] Client A: log de A2
+   [2025-07-24T14:20:02Z] Client B: log de B2
+   [2025-07-24T14:20:02Z] Client A: log de A3
+   ```
+
+### Concepts Rust illustrés
+- **Asynchronisme avec Tokio** :
+  - Utilisation de `tokio::spawn` pour lancer des tâches asynchrones.
+  - Gestion des connexions TCP avec `TcpListener` et `TcpStream`.
+
+- **Mutex et gestion des ressources partagées** :
+  - Utilisation de `std::sync::Mutex` pour protéger l'accès concurrent au fichier de log.
+
+- **Canaux pour la communication** :
+  - Utilisation de `tokio::sync::mpsc` pour transmettre les messages des tâches au gestionnaire de logs.
+
+- **Horodatage** :
+  - Utilisation de `chrono::Utc` pour générer des timestamps au format ISO 8601.
+
+### Instructions pour tester
+1. **Lancer le serveur** :
+   - Exécutez le serveur avec la commande :
+     ```bash
+     cargo run --bin tp4
+     ```
+
+2. **Lancer les clients** :
+   - Dans un autre terminal, exécutez les clients avec la commande :
+     ```bash
+     cargo run --bin client
+     ```
+
+3. **Vérifier le fichier de log** :
+   - Les messages envoyés par les clients seront enregistrés dans `logs/server.log`.
+
+### Notes importantes
+- **Gestion des erreurs** :
+  - Le serveur et les clients gèrent les erreurs de connexion et d'écriture avec des messages explicites.
+- **Simultanéité** :
+  - Plusieurs clients peuvent se connecter et envoyer des messages en même temps sans bloquer le serveur.
+- **Structure modulaire** :
+  - Le code est organisé en deux fichiers (`main.rs` pour le serveur et `client.rs` pour les clients) pour une meilleure lisibilité et testabilité.
