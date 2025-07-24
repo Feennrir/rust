@@ -1,27 +1,9 @@
-[2025-07-24T13:38:21.102210+00:00] GET / HTTP/1.1
-[2025-07-24T13:38:21.102235+00:00] Host: 127.0.0.1:10000
-[2025-07-24T13:38:21.102240+00:00] Connection: keep-alive
-[2025-07-24T13:38:21.102244+00:00] sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138"
-[2025-07-24T13:38:21.102248+00:00] sec-ch-ua-mobile: ?0
-[2025-07-24T13:38:21.102252+00:00] sec-ch-ua-platform: "macOS"
-[2025-07-24T13:38:21.102256+00:00] DNT: 1
-[2025-07-24T13:38:21.102314+00:00] Upgrade-Insecure-Requests: 1
-[2025-07-24T13:38:21.102320+00:00] User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
-[2025-07-24T13:38:21.102324+00:00] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-[2025-07-24T13:38:21.102333+00:00] Sec-Fetch-Site: none
-[2025-07-24T13:38:21.102403+00:00] Sec-Fetch-Mode: navigate
-[2025-07-24T13:38:21.102637+00:00] Sec-Fetch-User: ?1
-[2025-07-24T13:38:21.102676+00:00] Sec-Fetch-Dest: document
-[2025-07-24T13:38:21.102737+00:00] Accept-Encoding: gzip, deflate, br, zstd
-[2025-07-24T13:38:21.102741+00:00] Accept-Language: en-US,en;q=0.9,fr;q=0.8
-[2025-07-24T13:38:21.102768+00:00] 
-[2025-07-24T13:41:49.594024+00:00] 
-[2025-07-24T13:52:44.841221+00:00] Client B: log de B1
-[2025-07-24T13:52:44.841258+00:00] Client A: log de A1
-[2025-07-24T13:52:44.841284+00:00] Client C: log de C1
-[2025-07-24T13:52:45.843111+00:00] Client A: log de A2
-[2025-07-24T13:52:45.843160+00:00] Client C: log de C2
-[2025-07-24T13:52:45.843206+00:00] Client B: log de B2
-[2025-07-24T13:52:46.844817+00:00] Client C: log de C3
-[2025-07-24T13:52:46.844826+00:00] Client A: log de A3
-[2025-07-24T13:52:47.847374+00:00] Client C: log de C4
+[2025-07-24T14:12:36.282071+00:00] Client C: log de C1
+[2025-07-24T14:12:36.282127+00:00] Client A: log de A1
+[2025-07-24T14:12:36.282168+00:00] Client B: log de B1
+[2025-07-24T14:12:37.283713+00:00] Client C: log de C2
+[2025-07-24T14:12:37.283713+00:00] Client A: log de A2
+[2025-07-24T14:12:37.283790+00:00] Client B: log de B2
+[2025-07-24T14:12:38.285944+00:00] Client A: log de A3
+[2025-07-24T14:12:38.286112+00:00] Client C: log de C3
+[2025-07-24T14:12:39.287560+00:00] Client C: log de C4
